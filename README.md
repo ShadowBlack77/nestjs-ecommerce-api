@@ -63,16 +63,3 @@
 - Ograniczenie ilośc zapytań/na minutę
 - API Key
 
-## Do Zrobienia
-- CRUD Produktów (Dodawanie, edytowanie, usuwanie, listowanie)
-- Możliwość dodawania zdjęć produktów (Integracja z np.: AWS S3, Cloudinary)
-- Tworzenie zamówień
-- Status zamówień (np.: Oczekujące, przetwarzanie, wyslane, dostarczone)
-- Historia zamówień dla użytkownika
-- API do obsługi koszyka (dodawanie/usuwanie produktów, obliczanie sumy)
-- Obśługa listy życzeń
-- Rozszerzenie kont użytkowników (Dane Kontaktowe, Adres, Historia Zakupów)
-- Możliwość edycji danych użytkownika
-- Integracja ze Stripe
-- Powiadomienia o statusie zamówienia (Email)
-- Panel administracyjny (Zarządzanie produktami, użytkownikami, zamówieniami oraz Statystyki sprzedaży)
