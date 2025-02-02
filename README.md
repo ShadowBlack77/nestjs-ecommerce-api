@@ -43,12 +43,14 @@
 - npm i --save @nestjs-modules/mailer nodemailer
 - npm i --save-dev @types/nodemailer
 - npm i --save handlebars
-- npm install @nestjs-modules/mailer handlebars
-- npm install uuid
-- npm install @types/uuid
+- npm i @nestjs-modules/mailer handlebars
+- npm i uuid
+- npm i @types/uuid
 - npm i qrcode otplib
 - npm i --save-dev @types/qrcode
-- npm install @nestjs/throttler
+- npm i @nestjs/throttler
+- npm i --save stripe
+- npm i cloudinary
 
 ## App Features
 - Logowanie za pomocą Emaila i Hasła
@@ -62,4 +64,3 @@
 - Hashowanie hasła, Refresh Tokena oraz JWT w bazie danych
 - Ograniczenie ilośc zapytań/na minutę
 - API Key
-
