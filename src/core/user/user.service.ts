@@ -63,7 +63,8 @@ export class UserService {
         'email', 
         'avatarUrl', 
         'role', 
-        'tfa'
+        'tfa',
+        'emailVerified'
       ]
     });
   }

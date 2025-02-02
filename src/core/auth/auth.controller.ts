@@ -2,7 +2,7 @@ import { Body, Controller, Get, HttpCode, HttpStatus, Param, Patch, Post, Query,
 import { AuthService } from './auth.service';
 import { GoogleAuthGuard, LocalAuthGuard, RefreshAuthGuard } from './guards';
 import { Request, Response } from 'express';
-import { Public } from './decorators';
+import { Public, SkipKey } from './decorators';
 import { AuthRequest, ResetPasswordRequest } from './models';
 import { ChangePasswordRequest } from './models/change-password.request';
 import { TfaRequest, UserRequest } from '../user/models';
@@ -19,7 +19,8 @@ export class AuthController {
   public login(@Req() req: AuthRequest, @Res() res: Response) {
     return this.authService.login(req, res);
   }
-
+  
+  @Public()
   @UseGuards(RefreshAuthGuard)
   @Post("/refresh")
   public refreshToken(@Req() req: UserRequest, @Res() res: Response) {
@@ -62,9 +63,10 @@ export class AuthController {
   }
 
   @Public()
+  @SkipKey()
   @Get('/email-verify')
-  public emailVerification(@Query('tokenId') tokenId: string, @Query('token') token: string) {
-    return this.authService.emailVerify(tokenId, token);
+  public emailVerification(@Query('tokenId') tokenId: string, @Query('token') token: string, @Res() res: Response) {
+    return this.authService.emailVerify(tokenId, token, res);
   }
 
   @Get('/enable-2fa')
@@ -81,5 +83,10 @@ export class AuthController {
   @Post('/verify-2fa')
   public verify(@Body() tfaRequest: TfaRequest, @Req() req: Request, @Res() res: Response) {
     return this.authService.validate2faAuthorization(tfaRequest, req, res);
+  }
+
+  @Get('/check-auth')
+  public checkAuth() {
+    return { content: true };
   }
 }

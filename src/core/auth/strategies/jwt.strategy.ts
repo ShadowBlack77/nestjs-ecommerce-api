@@ -16,6 +16,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   ) {
     super({
       jwtFromRequest: (req: Request) => {
+
         if (req && req.cookies) {
           return req.cookies['full-nest-auth-at'];
         }
@@ -30,6 +31,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
   public validate(req: Request, payload: Payload) {
     const accessToken = req.cookies['full-nest-auth-at'];
+
     const userId = payload.sub;
 
     return this.authService.validateJwtUser(userId, accessToken);

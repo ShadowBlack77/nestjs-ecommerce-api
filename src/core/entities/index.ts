@@ -6,3 +6,4 @@ export * from './cart.entity';
 export * from './cart_item.entity';
 export * from './coupon.entity';
 export * from './user_coupon.entity';
+export * from './category.entity';

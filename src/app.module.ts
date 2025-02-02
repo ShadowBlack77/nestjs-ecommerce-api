@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ThrottlerModule } from '@nestjs/throttler';
-import { Cart, CartItem, Coupon, EmailTokens, LoginSession, Product, User, UserCoupon } from './core/entities';
+import { Cart, CartItem, Category, Coupon, EmailTokens, LoginSession, Product, User, UserCoupon } from './core/entities';
 import { Order } from './core/entities/order.entity';
 import { ProductsModule } from './ecommerce/products/products.module';
 import { LoginSessionModule } from './core/login-session/login-session.module';
@@ -28,7 +28,7 @@ import { AnalyticsModule } from './ecommerce/analytics/analytics.module';
       url: process.env.DB_URL,
       type: "postgres",
       port: +process.env.PORT,
-      entities: [User, EmailTokens, LoginSession, Cart, Product, CartItem, Order, UserCoupon, Coupon],
+      entities: [User, EmailTokens, LoginSession, Cart, Product, CartItem, Order, UserCoupon, Coupon, Category],
       synchronize: true,
     }),
     UserModule, AuthModule, MailsModule, LoginSessionModule, ProductsModule, PaymentsModule, CartModule, CouponModule, AnalyticsModule

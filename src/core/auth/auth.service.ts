@@ -245,6 +245,14 @@ export class AuthService {
       sameSite: 'strict'
     });
 
+    res.cookie('full-nest-auth-at', '', {
+      httpOnly: true,
+      secure: false,
+      maxAge: 0,
+      path: '/',
+      sameSite: 'strict'
+    });
+
     res.status(201).json({ content: 'logout' });
   }
 
@@ -296,8 +304,10 @@ export class AuthService {
     });
   }
 
-  public async emailVerify(tokenId: string, token: string) {
-    return await this.mailsService.checkTokenValidation(tokenId, token);
+  public async emailVerify(tokenId: string, token: string, res: Response) {
+    await this.mailsService.checkTokenValidation(tokenId, token);
+
+    return res.redirect('http://localhost:4200/auth/login');
   }
 
   public async resetPassword(resetPasswordDto: ResetPasswordDto) {
