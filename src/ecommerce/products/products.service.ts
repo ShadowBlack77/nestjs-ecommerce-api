@@ -5,31 +5,41 @@ import { Repository } from 'typeorm';
 import { v2 as cloudinary } from 'cloudinary';
 import { Readable } from 'stream';
 import { CategoryList } from './enum/category.enum';
+import { RedisService } from 'src/core/redis/redis.service';
+import { PaginationDto } from './models';
+import { DEFAULT_PAGE_SIZE } from 'src/core/utils/constants';
 
 @Injectable()
 export class ProductsService {
 
   constructor(
     @InjectRepository(Product) private readonly productRepository: Repository<Product>,
-    @InjectRepository(Category) private readonly categoryRepository: Repository<Category>
+    @InjectRepository(Category) private readonly categoryRepository: Repository<Category>,
+    private readonly redisService: RedisService
   ) {}
 
-  public async getAll() {
+  public async getAll(paginationDto: PaginationDto) {
     try {
-      return await this.productRepository.find();
+      return await this.productRepository.find({
+        skip: paginationDto.skip,
+        take: paginationDto.limit ?? DEFAULT_PAGE_SIZE,
+      });
     } catch (error) {
       throw new NotFoundException("Products not found");
     }
   }
 
-  public async getAllFeatured() {
+  public async getAllFeatured(paginationDto: PaginationDto) {
     try {
       return await this.productRepository.find({
+        skip: paginationDto.skip,
+        take: paginationDto.limit ?? DEFAULT_PAGE_SIZE,
         where: {
           isFeatured: true
         }
       });
     } catch (error) {
+      console.log(error);
       throw new NotFoundException("Featured products not found");
     }
   }

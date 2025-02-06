@@ -34,10 +34,4 @@ import { UserService } from '../user/user.service';
   ],
   providers: [MailsService, UserService],
 })
-export class MailsModule {
-
-  constructor() {
-    console.log(__dirname);
-  }
-
-}
+export class MailsModule {}
