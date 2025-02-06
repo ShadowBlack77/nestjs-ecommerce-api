@@ -27,6 +27,6 @@ export class RedisService {
   }
 
   public async setKey(key: string, value: string, options?: any) {
-
+    return await this.redisClient.set(key, value);
   }
 }

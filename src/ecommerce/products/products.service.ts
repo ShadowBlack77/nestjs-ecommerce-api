@@ -8,6 +8,7 @@ import { CategoryList } from './enum/category.enum';
 import { RedisService } from 'src/core/redis/redis.service';
 import { PaginationDto } from './models';
 import { DEFAULT_PAGE_SIZE } from 'src/core/utils/constants';
+import { Response } from 'express';
 
 @Injectable()
 export class ProductsService {
@@ -29,18 +30,33 @@ export class ProductsService {
     }
   }
 
-  public async getAllFeatured(paginationDto: PaginationDto) {
+  public async getAllFeatured(res: Response, paginationDto: PaginationDto) {
     try {
-      return await this.productRepository.find({
+
+      let featuredProducts: any = await this.redisService.getKey('featured_products');
+
+      if (featuredProducts) {
+        return res.status(200).json({ featuredProducts: JSON.parse(featuredProducts) });
+      }
+
+      featuredProducts = await this.productRepository.find({
         skip: paginationDto.skip,
         take: paginationDto.limit ?? DEFAULT_PAGE_SIZE,
         where: {
           isFeatured: true
         }
       });
+
+      if (!featuredProducts) {
+        throw new NotFoundException("Featured products not found")
+      }
+
+      await this.redisService.setKey('featured_products', JSON.stringify(featuredProducts));
+
+      return res.status(200).json({ featuredProducts });
     } catch (error) {
       console.log(error);
-      throw new NotFoundException("Featured products not found");
+      throw new NotFoundException(error.message);
     }
   }
 
@@ -168,6 +184,16 @@ export class ProductsService {
   }
 
   private async updateFeaturedCache() {
-    
+    try {
+      const featuredProducts = await this.productRepository.find({ 
+        where: {
+          isFeatured: true
+        } 
+      });
+
+      await this.redisService.setKey('featured_products', JSON.stringify(featuredProducts));
+    } catch (error) {
+      throw new BadRequestException('Error occured while trying cache products');
+    }
   }
 }

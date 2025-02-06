@@ -1,8 +1,9 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Query, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Query, Res, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { Public } from 'src/core/auth/decorators';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { PaginationDto } from './models';
+import { Response } from 'express';
 
 @Controller('products')
 export class ProductsController {
@@ -16,8 +17,8 @@ export class ProductsController {
 
   @Public()
   @Get('/featured')
-  public getAllFeatured(@Query() paginationDto: PaginationDto) {
-    return this.productService.getAllFeatured(paginationDto);
+  public getAllFeatured(@Res() res: Response, @Query() paginationDto: PaginationDto) {
+    return this.productService.getAllFeatured(res, paginationDto);
   }
 
   @Get('/categories')
