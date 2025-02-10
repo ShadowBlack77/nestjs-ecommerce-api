@@ -12,16 +12,16 @@ import { UserService } from '../user/user.service';
     TypeOrmModule.forFeature([EmailTokens, User]),
     MailerModule.forRoot({
       transport: {
-        host: 'smtp.poczta.onet.pl',
-        port: 465,
+        host: process.env.MAILS_HOST,
+        port: +process.env.MAILS_PORT,
         secure: true,
         auth: {
-          user: 'dogry.bonus@op.pl',
-          pass: 'diablo221'
+          user: process.env.MAILS_USER,
+          pass: process.env.MAILS_PASS
         }
       },
       defaults: {
-        from: 'dogry.bonus@op.pl'
+        from: process.env.MAILS_FROM
       },
       template: {
         dir: join(__dirname, './templates'),

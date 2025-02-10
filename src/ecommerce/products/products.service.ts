@@ -120,7 +120,31 @@ export class ProductsService {
   }
 
   public async delete(id: number) {
+    try {
+      const product = await this.productRepository.findOneBy({ id });
 
+      if (!product) {
+        throw new NotFoundException('Product not found');
+      }
+
+      if (product.image) {
+        const publicId = product.image.split('/').pop().split('.')[0];
+
+        try {
+          await cloudinary.uploader.destroy(`products/${publicId}`);
+
+          console.log('Image deleted from cloudinary');
+        } catch (error) {
+          console.log("error deleting image from cloduinary", error);
+        }
+      }
+
+      await this.productRepository.delete({ id });
+
+      return { content: 'Product deleted successfully' };
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
 
   public async getAllRecommended() {
@@ -158,18 +182,23 @@ export class ProductsService {
 
   public async toggleFeatured(id: number) {
     try {
-
       const product = await this.productRepository.findOneBy({ id });
 
-      const feature = product.isFeatured;
+      if (product) {
+        const feature = product.isFeatured;
 
-      await this.productRepository.update({
-        id
-      }, {
-        isFeatured: !feature
-      });
+        await this.productRepository.update({
+          id
+        }, {
+          isFeatured: !feature
+        });
 
-      return { content: 'product now is featured' };
+        await this.updateFeaturedCache();
+
+        return { content: 'product now is featured' };
+      } else {
+        throw new NotFoundException('Product not found')
+      }
     } catch(error) {
       throw new BadRequestException('Cannot toggle featured of product');
     }

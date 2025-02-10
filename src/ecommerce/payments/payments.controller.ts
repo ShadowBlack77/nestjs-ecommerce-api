@@ -13,7 +13,7 @@ export class PaymentsController {
   }
 
   @Post('/checkout-success')
-  public checkoutSuccess(@Res() res: Response) {
-
+  public checkoutSuccess(@Req() req: Request, @Res() res: Response, sessionRequest: any) {
+    return this.paymentsService.checkoutSession(req, res, sessionRequest);
   }
 }
